@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
+<<<<<<< HEAD
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
@@ -8,6 +9,15 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
+=======
+  apiKey: "API_KEY",
+  authDomain: "AUTH_DOMAIN",
+  databaseURL: "https://time-tracker-app-d3b84-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "time-tracker-app-d3b84",
+  storageBucket: "time-tracker-app-d3b84.firebasestorage.app",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID",
+>>>>>>> 936e157 (done)
 };
 
 export const app = initializeApp(firebaseConfig);
