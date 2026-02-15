@@ -1,22 +1,21 @@
-// main.js
-
+import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "GOOGLE_API_KEY",
-  authDomain: "auth_domain",
-  databaseURL: "https://time-tracker-app-d3b84-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "time-tracker-app-d3b84",
-  storageBucket: "time-tracker-app-d3b84.firebasestorage.app",
-  messagingSenderId: "sender_id",
-  appId: "app_id",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-firebase.initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 2. DOM refs
+
 const viewLanding = document.getElementById("view-landing");
 const viewApp = document.getElementById("view-app");
 
@@ -59,17 +58,17 @@ let currentDate = null;
 let currentActivities = [];
 let totalMinutes = 0;
 
-// edit state
+
 let editingActivityId = null;
 let editingOriginalDuration = 0;
 
-// charts instances
+
 let pieChart = null;
 let barChart = null;
 
-// --------- UTILITIES ----------
+
 function formatDateToKey(date) {
-  // YYYY-MM-DD
+ 
   return date.toISOString().slice(0, 10);
 }
 
@@ -162,7 +161,6 @@ function renderActivitiesTable() {
   updateTotals();
 }
 
-// --------- FIRESTORE ----------
 function getActivitiesRef(uid, dateKey) {
   return db
     .collection("users")
@@ -184,7 +182,7 @@ async function loadActivitiesForDate(dateKey) {
   }));
 
   renderActivitiesTable();
-  resetDashboard(); // reset dashboard when date changes
+  resetDashboard(); 
 }
 
 async function addActivity(name, category, duration) {
@@ -227,7 +225,6 @@ async function deleteActivity(activity) {
   await loadActivitiesForDate(dateKey);
 }
 
-// --------- EDIT MODE ----------
 function startEditActivity(activity) {
   editingActivityId = activity.id;
   editingOriginalDuration = activity.duration;
@@ -254,7 +251,7 @@ function resetEditMode() {
   clearError();
 }
 
-// --------- DASHBOARD / CHARTS ----------
+
 function resetDashboard() {
   dashboardNoData.classList.remove("hidden");
   dashboardSummary.classList.add("hidden");
@@ -302,10 +299,10 @@ function buildDashboard() {
   dashboardNoData.classList.add("hidden");
   dashboardCharts.classList.remove("hidden");
 
-  // charts
+
   destroyCharts();
 
-  // Pie chart: category distribution
+
   pieChart = new Chart(chartPieCanvas.getContext("2d"), {
     type: "pie",
     data: {
@@ -328,7 +325,7 @@ function buildDashboard() {
     },
   });
 
-  // Bar chart: each activity
+
   barChart = new Chart(chartBarCanvas.getContext("2d"), {
     type: "bar",
     data: {
@@ -413,7 +410,7 @@ function renderNavAuth(user) {
   navAuth.appendChild(wrapper);
 }
 
-// --------- AUTH HANDLERS ----------
+
 btnGoogleLogin?.addEventListener("click", async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
@@ -446,7 +443,7 @@ auth.onAuthStateChanged(async (user) => {
   await loadActivitiesForDate(currentDate);
 });
 
-// --------- DATE PICKER ----------
+
 inputDate.addEventListener("change", async () => {
   const val = inputDate.value;
   if (!val) return;
@@ -455,7 +452,7 @@ inputDate.addEventListener("change", async () => {
   await loadActivitiesForDate(currentDate);
 });
 
-// --------- FORM SUBMIT ----------
+
 formActivity.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearError();
@@ -517,12 +514,12 @@ formActivity.addEventListener("submit", async (e) => {
   }
 });
 
-// Cancel edit
+
 btnCancelEdit.addEventListener("click", () => {
   resetEditMode();
 });
 
-// --------- ANALYSE BUTTON ----------
+
 btnAnalyse.addEventListener("click", () => {
   if (currentActivities.length === 0) {
     resetDashboard();
@@ -534,7 +531,7 @@ btnAnalyse.addEventListener("click", () => {
   dashboardSummary.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-// --------- INITIAL SETUP ----------
+
 (function init() {
   const today = new Date();
   const key = formatDateToKey(today);
